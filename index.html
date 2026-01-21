@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Sigma Fall - Matematik Uzayında Yolculuk</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -37,6 +38,7 @@
         },
       }
     </script>
+
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
       
@@ -50,20 +52,541 @@
         font-family: 'Orbitron', sans-serif;
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
-</head>
+
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.2.0",
+        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+        "react-dom": "https://esm.sh/react-dom@18.2.0", 
+        "lucide-react": "https://esm.sh/lucide-react@0.263.1?external=react"
+      }
+    }
+    </script>
+    
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
   <body>
     <div id="root"></div>
-  <script type="module" src="/index.tsx"></script>
-</body>
+
+    <script type="text/babel" data-type="module">
+      import React, { useState, useEffect } from 'react';
+      import { createRoot } from 'react-dom/client';
+      import { 
+        Menu, X, Sigma, Download, ChevronRight, Hexagon, Play, Settings, 
+        Trophy, Zap, Calculator, Brain, ArrowDown, CheckCircle2, Apple, Mail 
+      } from 'lucide-react';
+
+      // --- CONSTANTS ---
+      
+      const SCREENSHOTS = [
+        {
+          id: 1,
+          url: "./screenshot-main.jpg", 
+          caption: "Ana Menü ve Başlangıç"
+        },
+        {
+          id: 2,
+          url: "./screenshot-level-28.jpg",
+          caption: "Bölüm 28: Üçgen Modu"
+        },
+        {
+          id: 3,
+          url: "./screenshot-mission.jpg",
+          caption: "Görev ve Hedef Kartları"
+        },
+        {
+          id: 4,
+          url: "./screenshot-level-83.jpg",
+          caption: "Bölüm 83: Beşgen Modu"
+        }
+      ];
+
+      const NAV_LINKS = [
+        { label: 'Oyun Hakkında', href: '#features' },
+        { label: 'Nasıl Oynanır', href: '#gameplay' },
+        { label: 'Galeri', href: '#gallery' },
+        { label: 'İndir', href: '#download' },
+      ];
+
+      const FEATURES = [
+        {
+          title: "Hızlı Düşün",
+          description: "Yukarıdan düşen sayıları yakala ve saniyeler içinde karar ver.",
+          icon: <Zap className="w-8 h-8" />,
+          color: "text-neon-yellow"
+        },
+        {
+          title: "Matematik Dehası",
+          description: "Toplama, çıkarma, çarpma ve bölme yeteneklerini uzay boşluğunda test et.",
+          icon: <Calculator className="w-8 h-8" />,
+          color: "text-neon-blue"
+        },
+        {
+          title: "Zihinsel Egzersiz",
+          description: "Her seviyede zorlaşan görevlerle beyin jimnastiği yap.",
+          icon: <Brain className="w-8 h-8" />,
+          color: "text-neon-pink"
+        },
+        {
+          title: "Liderlik Tablosu",
+          description: "En yüksek puanı topla, arkadaşlarını geç ve galaksinin hakimi ol.",
+          icon: <Trophy className="w-8 h-8" />,
+          color: "text-neon-green"
+        }
+      ];
+
+      // --- COMPONENTS ---
+
+      const Navbar = () => {
+        const [isOpen, setIsOpen] = useState(false);
+        const [scrolled, setScrolled] = useState(false);
+
+        useEffect(() => {
+          const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+          };
+          window.addEventListener('scroll', handleScroll);
+          return () => window.removeEventListener('scroll', handleScroll);
+        }, []);
+
+        return (
+          <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-space-900/90 backdrop-blur-md border-b border-white/10' : 'bg-transparent'}`}>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center justify-between h-20">
+                <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo(0,0)}>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-neon-blue to-purple-600 flex items-center justify-center text-white font-bold text-2xl shadow-[0_0_15px_rgba(0,240,255,0.5)]">
+                    <Sigma />
+                  </div>
+                  <span className="text-2xl font-bold tracking-wider brand-font text-white">
+                    SIGMA <span className="text-neon-blue">FALL</span>
+                  </span>
+                </div>
+                
+                <div className="hidden md:block">
+                  <div className="ml-10 flex items-baseline space-x-8">
+                    {NAV_LINKS.map((link) => (
+                      <a
+                        key={link.label}
+                        href={link.href}
+                        className="text-gray-300 hover:text-neon-blue hover:scale-105 transition-all px-3 py-2 rounded-md text-sm font-medium uppercase tracking-wide"
+                      >
+                        {link.label}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="md:hidden">
+                  <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-white/10 focus:outline-none"
+                  >
+                    {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile menu */}
+            {isOpen && (
+              <div className="md:hidden bg-space-900/95 backdrop-blur-xl border-b border-white/10">
+                <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                  {NAV_LINKS.map((link) => (
+                    <a
+                      key={link.label}
+                      href={link.href}
+                      onClick={() => setIsOpen(false)}
+                      className="text-gray-300 hover:text-neon-blue block px-3 py-4 rounded-md text-base font-bold text-center"
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </nav>
+        );
+      };
+
+      const Hero = () => {
+        return (
+          <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-space-900 pt-20">
+            {/* Background Ambience */}
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30"></div>
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-space-900/50 to-space-900"></div>
+            
+            {/* Decorative Floating Elements */}
+            <div className="absolute top-1/4 left-10 text-neon-blue opacity-20 animate-float hidden lg:block">
+              <Hexagon size={120} strokeWidth={1} />
+            </div>
+            <div className="absolute bottom-1/3 right-10 text-neon-pink opacity-20 animate-float-delayed hidden lg:block">
+              <Hexagon size={180} strokeWidth={1} />
+            </div>
+            
+            {/* Glowing Orbs */}
+            <div className="absolute top-20 right-1/4 w-64 h-64 bg-neon-blue/20 rounded-full blur-[100px]"></div>
+            <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-neon-pink/10 rounded-full blur-[120px]"></div>
+
+            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center">
+              
+              {/* Text Content */}
+              <div className="w-full md:w-1/2 text-center md:text-left z-10 mb-12 md:mb-0">
+                <div className="inline-block px-4 py-1 mb-6 rounded-full border border-neon-blue/30 bg-neon-blue/10 backdrop-blur-sm">
+                  <span className="text-neon-blue text-sm font-bold tracking-widest uppercase">Yeni Nesil Matematik Oyunu</span>
+                </div>
+                
+                <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight brand-font">
+                  SAYILARLA <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-blue via-purple-500 to-neon-pink">
+                    DANSA HAZIR MISIN?
+                  </span>
+                </h1>
+                
+                <p className="text-xl text-gray-300 mb-8 max-w-lg mx-auto md:mx-0 leading-relaxed">
+                  Sigma Fall ile matematik becerilerini test et. Düşen sayıları yakala, işlemi çöz ve doğru cevabı seç. Uzay boşluğunda zihnini serbest bırak.
+                </p>
+                
+                <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                  <button className="flex items-center justify-center px-8 py-4 bg-gradient-to-r from-neon-blue to-blue-600 rounded-xl font-bold text-white shadow-[0_0_20px_rgba(0,240,255,0.4)] hover:shadow-[0_0_30px_rgba(0,240,255,0.6)] hover:scale-105 transition-all group">
+                    <Download className="mr-2 group-hover:animate-bounce" />
+                    Hemen İndir
+                  </button>
+                  <button className="flex items-center justify-center px-8 py-4 bg-white/5 border border-white/10 rounded-xl font-bold text-white hover:bg-white/10 hover:border-white/30 transition-all">
+                    Nasıl Oynanır <ChevronRight className="ml-2 w-5 h-5" />
+                  </button>
+                </div>
+                
+                <div className="mt-12 flex items-center justify-center md:justify-start space-x-8 text-gray-400 text-sm font-medium">
+                  <div className="flex items-center">
+                    <span className="w-2 h-2 rounded-full bg-neon-green mr-2 animate-pulse"></span>
+                    Ücretsiz Oyna
+                  </div>
+                  <div className="flex items-center">
+                    <span className="w-2 h-2 rounded-full bg-neon-pink mr-2 animate-pulse"></span>
+                    Çevrimdışı Mod
+                  </div>
+                </div>
+              </div>
+
+              {/* Hero Image / Phone Mockup */}
+              <div className="w-full md:w-1/2 flex justify-center z-10 relative">
+                <div className="relative w-[280px] h-[580px] bg-space-900 rounded-[3rem] border-8 border-slate-800 shadow-2xl overflow-hidden ring-1 ring-white/10 transform rotate-[-5deg] hover:rotate-0 transition-transform duration-500">
+                  
+                  {/* CSS Generated Game UI (Main Menu) */}
+                   <div className="relative w-full h-full bg-space-900 flex flex-col items-center justify-center overflow-hidden">
+                      {/* Background Pattern */}
+                      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30"></div>
+                      <div className="absolute inset-0 bg-gradient-to-b from-space-900/20 via-space-800/40 to-space-900"></div>
+
+                      {/* Main Content */}
+                      <div className="z-10 flex flex-col items-center w-full px-6">
+                        
+                        {/* Logo Area */}
+                        <div className="mb-12 relative flex flex-col items-center">
+                          <div className="absolute inset-0 bg-neon-blue/10 blur-2xl rounded-full scale-150"></div>
+                          <div className="relative z-10 p-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm mb-6 animate-float">
+                              <Hexagon size={48} className="text-neon-blue" strokeWidth={1.5} />
+                          </div>
+                          
+                          <h2 className="text-4xl font-extrabold text-white tracking-widest brand-font leading-none mb-1 text-center drop-shadow-[0_0_8px_rgba(0,240,255,0.5)]">
+                            SIGMA
+                          </h2>
+                          <h2 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-neon-blue to-purple-500 tracking-widest brand-font leading-none text-center">
+                            FALL
+                          </h2>
+                        </div>
+                        
+                        {/* Play Button */}
+                        <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-neon-blue to-blue-600 flex items-center justify-center shadow-[0_0_30px_rgba(0,240,255,0.4)] cursor-pointer hover:scale-110 transition-transform group">
+                          <Play className="w-10 h-10 text-white fill-current ml-1 group-hover:animate-pulse" />
+                        </div>
+                        <p className="mt-4 text-xs font-bold text-neon-blue tracking-[0.3em] animate-pulse">TAP TO START</p>
+                        
+                        {/* Menu Buttons */}
+                        <div className="mt-16 flex gap-6 w-full justify-center">
+                          <div className="flex flex-col items-center gap-2 group cursor-pointer">
+                              <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
+                                  <Trophy size={20} className="text-gray-400 group-hover:text-neon-yellow transition-colors" />
+                              </div>
+                          </div>
+                           <div className="flex flex-col items-center gap-2 group cursor-pointer">
+                              <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
+                                  <Settings size={20} className="text-gray-400 group-hover:text-neon-pink transition-colors" />
+                              </div>
+                          </div>
+                        </div>
+
+                      </div>
+                  </div>
+                  
+                  {/* Glossy Reflection */}
+                  <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-white/5 to-transparent pointer-events-none rounded-[2.5rem]"></div>
+                </div>
+                
+                {/* Floating badge behind phone */}
+                <div className="absolute top-1/2 -right-4 md:-right-10 bg-space-800/90 backdrop-blur-md p-4 rounded-2xl border border-neon-pink/30 shadow-lg animate-float-delayed">
+                   <div className="flex items-center gap-3">
+                       <div className="bg-neon-pink/20 p-2 rounded-full">
+                           <Hexagon className="text-neon-pink w-6 h-6" />
+                       </div>
+                       <div>
+                           <p className="text-xs text-gray-400">Günlük Görev</p>
+                           <p className="text-sm font-bold text-white">Tamamlandı!</p>
+                       </div>
+                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      const Features = () => {
+        return (
+          <section id="features" className="py-24 bg-space-800 relative">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-16">
+                <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 brand-font">
+                  OYUN <span className="text-neon-blue">ÖZELLİKLERİ</span>
+                </h2>
+                <div className="h-1 w-24 bg-gradient-to-r from-neon-blue to-neon-pink mx-auto rounded-full"></div>
+                <p className="mt-4 text-gray-400 max-w-2xl mx-auto">
+                  Sigma Fall sadece bir oyun değil, reflekslerinizi ve matematik zekanızı aynı anda zorlayan bir deneyim.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {FEATURES.map((feature, index) => (
+                  <div 
+                    key={index}
+                    className="group bg-space-900/50 backdrop-blur-sm p-8 rounded-2xl border border-white/5 hover:border-neon-blue/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_30px_-10px_rgba(0,240,255,0.2)]"
+                  >
+                    <div className={`mb-6 p-4 rounded-xl bg-white/5 inline-block ${feature.color} group-hover:scale-110 transition-transform duration-300`}>
+                      {feature.icon}
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 brand-font">{feature.title}</h3>
+                    <p className="text-gray-400 leading-relaxed text-sm">
+                      {feature.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const HowToPlay = () => {
+        return (
+          <section id="gameplay" className="py-24 bg-space-900 relative overflow-hidden">
+              {/* Background Grid */}
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+              <div className="text-center mb-16">
+                <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 brand-font">
+                  NASIL <span className="text-neon-pink">OYNANIR?</span>
+                </h2>
+                <p className="text-gray-400">Üç basit adımda zirveye ulaş.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                  
+                  {/* Step 1 */}
+                  <div className="relative flex flex-col items-center text-center">
+                      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-3xl font-bold text-white mb-6 shadow-lg shadow-orange-500/30 transform rotate-3">
+                          1
+                      </div>
+                      <h3 className="text-2xl font-bold text-white mb-2">Görevi İncele</h3>
+                      <p className="text-gray-400 px-6">
+                          Sol üst köşedeki göreve bak. <br/>
+                          <span className="text-orange-400 font-mono text-sm bg-orange-900/30 px-2 py-1 rounded mt-2 inline-block">Örn: 50 Çıkar, 5 Çarp</span>
+                      </p>
+                  </div>
+
+                  {/* Arrow for Desktop */}
+                  <div className="hidden md:flex justify-center text-white/20">
+                       <ArrowDown className="w-8 h-8 -rotate-90" />
+                  </div>
+
+                  {/* Step 2 */}
+                  <div className="relative flex flex-col items-center text-center">
+                      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-neon-blue to-blue-700 flex items-center justify-center text-3xl font-bold text-white mb-6 shadow-lg shadow-blue-500/30 transform -rotate-3">
+                          2
+                      </div>
+                      <h3 className="text-2xl font-bold text-white mb-2">İşlemi Yap</h3>
+                      <p className="text-gray-400 px-6">
+                         Yukarıdan düşen sayı ile görevdeki işlemi kafandan hesapla.
+                         <br/>
+                         <span className="text-neon-blue font-mono text-sm bg-blue-900/30 px-2 py-1 rounded mt-2 inline-block">Sayı: 100 -> (100-50)*5 = 250</span>
+                      </p>
+                  </div>
+
+                   {/* Arrow for Desktop */}
+                   <div className="hidden md:flex justify-center text-white/20">
+                       <ArrowDown className="w-8 h-8 -rotate-90" />
+                  </div>
+
+                  {/* Step 3 */}
+                  <div className="relative flex flex-col items-center text-center">
+                      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-neon-green to-emerald-700 flex items-center justify-center text-white mb-6 shadow-lg shadow-green-500/30 transform rotate-3">
+                          <CheckCircle2 size={40} />
+                      </div>
+                      <h3 className="text-2xl font-bold text-white mb-2">Cevabı Seç</h3>
+                      <p className="text-gray-400 px-6">
+                          Aşağıdaki şıklardan doğru olanı süre bitmeden işaretle!
+                      </p>
+                  </div>
+
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Gallery = () => {
+        return (
+          <section id="gallery" className="py-24 bg-space-800">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex flex-col md:flex-row justify-between items-end mb-12">
+                  <div>
+                      <h2 className="text-3xl md:text-5xl font-bold text-white mb-2 brand-font">
+                      OYUN <span className="text-neon-yellow">EKRANLARI</span>
+                      </h2>
+                      <p className="text-gray-400">Sigma Fall evreninden kareler.</p>
+                  </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {SCREENSHOTS.map((shot) => (
+                  <div key={shot.id} className="group relative">
+                      {/* Phone Frame */}
+                    <div className="relative aspect-[9/19.5] rounded-[2rem] border-8 border-space-900 bg-space-900 overflow-hidden shadow-2xl transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-[0_0_20px_rgba(255,214,0,0.3)]">
+                      {/* Image Placeholder - User should replace src with real images */}
+                      <img 
+                        src={shot.url} 
+                        alt={shot.caption}
+                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                      />
+                      
+                      {/* Overlay Text */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                          <p className="text-white font-bold text-lg">{shot.caption}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const DownloadSection = () => {
+        return (
+          <section id="download" className="py-24 relative overflow-hidden">
+             {/* Background Gradient */}
+            <div className="absolute inset-0 bg-gradient-to-r from-indigo-900 to-purple-900"></div>
+            
+            {/* Decorative Circles */}
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
+                <div className="absolute -top-20 -left-20 w-96 h-96 bg-neon-blue/20 rounded-full blur-[100px]"></div>
+                <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-neon-pink/20 rounded-full blur-[100px]"></div>
+            </div>
+
+            <div className="max-w-4xl mx-auto px-4 relative z-10 text-center">
+              <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 brand-font">
+                MACERAYA BAŞLA
+              </h2>
+              <p className="text-xl text-indigo-200 mb-12 max-w-2xl mx-auto">
+                Sigma Fall'u şimdi indir ve matematik evrenindeki yerini al. Ücretsiz ve internetsiz oynanabilir.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+                  {/* App Store Button */}
+                  <button className="flex items-center bg-black text-white px-8 py-4 rounded-xl border border-white/10 hover:bg-gray-900 hover:scale-105 transition-all shadow-xl w-64 justify-center group">
+                      <Apple className="w-8 h-8 mr-3 group-hover:text-gray-300" fill="currentColor" />
+                      <div className="text-left">
+                          <div className="text-xs text-gray-400">Download on the</div>
+                          <div className="text-xl font-bold font-sans">App Store</div>
+                      </div>
+                  </button>
+
+                  {/* Google Play Button */}
+                  <button className="flex items-center bg-black text-white px-8 py-4 rounded-xl border border-white/10 hover:bg-gray-900 hover:scale-105 transition-all shadow-xl w-64 justify-center group">
+                      <Play className="w-8 h-8 mr-3 group-hover:text-neon-green" fill="currentColor" />
+                      <div className="text-left">
+                          <div className="text-xs text-gray-400">GET IT ON</div>
+                          <div className="text-xl font-bold font-sans">Google Play</div>
+                      </div>
+                  </button>
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      const Footer = () => {
+        return (
+          <footer className="bg-space-900 border-t border-white/5 pt-16 pb-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
+                
+                <div className="col-span-1">
+                  <div className="flex items-center gap-2 mb-4">
+                     <div className="w-8 h-8 rounded bg-gradient-to-br from-neon-blue to-purple-600 flex items-center justify-center text-white shadow-lg">
+                        <Sigma size={18} />
+                      </div>
+                      <span className="text-xl font-bold text-white brand-font">SIGMA FALL</span>
+                  </div>
+                  <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+                    Matematik ve reflekslerin buluştuğu nokta. Uzay boşluğunda zihinsel sınırlarını zorla.
+                  </p>
+                </div>
+
+                <div className="md:text-right">
+                  <h4 className="text-white font-bold mb-4">Destek</h4>
+                  <ul className="space-y-2 text-gray-400 text-sm">
+                    <li><a href="https://smm1907.github.io/sigmafall/privacy.html" className="hover:text-neon-blue transition-colors">Gizlilik Politikası</a></li>
+                    <li><a href="https://smm1907.github.io/sigmafall/terms.html" className="hover:text-neon-blue transition-colors">Kullanım Şartları</a></li>
+                  </ul>
+                </div>
+
+              </div>
+
+              <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p className="text-gray-500 text-sm">
+                  &copy; {new Date().getFullYear()} Sigma Fall. Tüm hakları saklıdır.
+                </p>
+                <div className="flex items-center gap-2 mt-4 md:mt-0 text-gray-500 text-sm">
+                   <Mail size={14} />
+                   <span>samimbaydar@hotmail.com</span>
+                </div>
+              </div>
+            </div>
+          </footer>
+        );
+      };
+
+      const App = () => {
+        return (
+          <div className="min-h-screen bg-space-900 text-white selection:bg-neon-pink selection:text-white">
+            <Navbar />
+            <main>
+              <Hero />
+              <Features />
+              <HowToPlay />
+              <Gallery />
+              <DownloadSection />
+            </main>
+            <Footer />
+          </div>
+        );
+      };
+
+      const root = createRoot(document.getElementById('root'));
+      root.render(<App />);
+    </script>
+  </body>
 </html>
